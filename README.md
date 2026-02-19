@@ -8,3 +8,10 @@ Production-ready authentication backend built with Node.js, Express, JWT, and Mo
 - Secure HTTP - Only cookies
 - JWT Authentication (Access + Refresh Token)
 - Centralized Error Handling
+## Tech Stack
+- Node.Js
+- Express
+- MongoDB
+- JWT
+- Bcrypt
+- Express rate limit
