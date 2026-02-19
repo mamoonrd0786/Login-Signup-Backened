@@ -1,4 +1,4 @@
-Login & Signup Authentication API
+#Login & Signup Authentication API
 Production-ready authentication backend built with Node.js, Express, JWT, and MongoDB. Includes secure password hashing, access & refresh tokens, rate limiting, and email verification.
 ## FEATURES
 - User Signup & Login
@@ -15,3 +15,5 @@ Production-ready authentication backend built with Node.js, Express, JWT, and Mo
 - JWT
 - Bcrypt
 - Express rate limit
+- Express validators
+- Nodemailer for Email notifications
