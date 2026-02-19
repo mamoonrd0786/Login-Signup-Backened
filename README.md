@@ -17,3 +17,16 @@ Production-ready authentication backend built with Node.js, Express, JWT, and Mo
 - Express rate limit
 - Express validators
 - Nodemailer for Email notifications
+## Folder Structure
+src/
+|
+|---- Controllers/
+|---- Models/
+|---- Middlewares/
+|---- routes/
+|
+|
+|
+|
+|
+|
