@@ -7,4 +7,3 @@ exports.allowRoles = (...roles) => {
     }
 }
 
-// module.exports = {allowRoles};

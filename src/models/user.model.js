@@ -32,16 +32,14 @@ const userSchema = new mongoose.Schema(
         },
         role: {
             type: String,
-            enum: ["admin", "librarian", "student"],
-            default: "student"
+            enum: ["admin", "librarian", "user"],
+            default: "user"
         }
-    }, {timestamps: true})
+    }, { timestamps: true })
 
 userSchema.pre('save', async function (req, res, next) {
     if (!this.isModified("password")) return next;
-
-    this.password = bcrypt.hash(this.password, 10);
-    // next()
+    this.password = await bcrypt.hash(this.password, 10);
 })
 
 userSchema.methods.isPasswordCorrect = async function (password) {
@@ -59,7 +57,8 @@ userSchema.methods.generateJSONWebToken = function () {
         },
         process.env.JWT_SECRET_KEY,
         {
-            expiresIn: process.env.JWT_EXPIRES_IN
+            // expiresIn: process.env.JWT_EXPIRES_IN
+            expiresIn: "15m"
         }
     )
 }
@@ -72,7 +71,8 @@ userSchema.methods.generateRefreshJSONWebToken = function () {
         },
         process.env.JWT_REFRESH_KEY,
         {
-            expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN
+            // expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN
+            expiresIn: "7d"
         }
     )
 }

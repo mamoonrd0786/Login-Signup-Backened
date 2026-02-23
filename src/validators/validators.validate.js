@@ -27,4 +27,5 @@ exports.validateLogin = [
         .isEmail()
         .isLength({ min: 10, max: 30 }),
     check('password', "Password number should contains 8 to 12 digits")
-        .isLength({ min: 8, max: 12 })]
+        .isLength({ min: 8, max: 12 })
+]
