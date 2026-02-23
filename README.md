@@ -24,9 +24,3 @@ src/
 |---- Models/
 |---- Middlewares/
 |---- routes/
-|---- 
-|
-|
-|
-|
-|
