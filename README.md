@@ -19,14 +19,7 @@ Production-ready authentication backend built with Node.js, Express, JWT, and Mo
 - Nodemailer for Email notifications
 ## Folder Structure
 src/
-|
 |---- Controllers/
 |---- Models/
 |---- Middlewares/
 |---- routes/
-|---- 
-|
-|
-|
-|
-|
