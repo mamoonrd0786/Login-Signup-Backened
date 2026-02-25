@@ -18,10 +18,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
 
 
-// Router 
+// User routes
 const userRouter = require("./routes/user.routes");
-
 app.use("/api/v1/users", userRouter);
+
+// Book routes
+
+const bookRouter = require('./routes/book.routes');
+app.use("/api/v1/books", bookRouter);
+
 
 
 

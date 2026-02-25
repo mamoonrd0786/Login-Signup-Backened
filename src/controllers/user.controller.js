@@ -2,7 +2,7 @@ const User = require("../models/user.model");
 const { asyncHandler } = require("../utils/asyncHandler");
 const { ApiResponse } = require("../utils/ApiResponse");
 const { ApiError } = require("../utils/ApiError");
-const emailService = require("../services/email.service.js");
+// const emailService = require("../services/email.service.js");
 const jwt = require("jsonwebtoken");
 
 async function generateAccessAndRefreshTokens(userId) {
