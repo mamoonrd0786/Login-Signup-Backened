@@ -3,9 +3,9 @@ const Book = require('../models/book.model');
 const createBook = async function (req, res) {
     // sabse pahle book ka data lenge
     // book available hai kya ye check karenge
-    // savi fields ka validation check karenge 
+    // savi fields ka validation check karenge
     // book sirf admin hi add karsakta hai 
-    // book add karenge 
+    // book add karenge
     // agar book add nhi hua hai to ek error message generate karenge
     // agar book add ho gaya hai to user ko response karenge
 
@@ -22,7 +22,6 @@ const createBook = async function (req, res) {
     }
 
     
-
     const bookCreated = await Book.create({
         title: title,
         author: author,
@@ -52,3 +51,4 @@ const createBook = async function (req, res) {
 
 
 module.exports = { createBook };
+

@@ -26,6 +26,9 @@ async function generateAccessAndRefreshTokens(userId) {
     }
 }
 
+
+// Signup controller
+
 exports.signup = asyncHandler(async (req, res) => {
     const { username, email, password, role } = req.body;
 
@@ -209,6 +212,7 @@ exports.deleteUser = asyncHandler(async function (req, res) {
         .json(new ApiResponse(200, user, "User delete successfully"));
 });
 
+
 exports.currentUser = asyncHandler(async function (req, res) {
     const user = await User.findById(req.user._id).select("-password, -refreshToken");
 
@@ -219,7 +223,32 @@ exports.currentUser = asyncHandler(async function (req, res) {
     return res
         .status(200)
         .json(
-            new ApiResponse( 200, user, "This user is logged in")
-           
+            new ApiResponse(200, user, "This user is logged in")
         )
+})
+
+// Get all users using pagination & search
+
+exports.getAllUsers = asyncHandler(async function (req, res) {
+
+    const search = req.query.search || '';
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const query = {
+        $or: [
+            { username: { $regex: search, $options: 'i' } },
+            { email: { $regex: search, $options: 'i' } }
+        ]
+    }
+
+    const total = await User.countDocuments(query);
+
+    const users = await User.find(query).skip(skip).limit(limit).select("-password");
+
+    return res.status(200).json(
+        new ApiResponse(200, { total, limit, page, skip, totalPage: Math.ceil(total / limit), users }, "Users here")
+    )
+
 })
