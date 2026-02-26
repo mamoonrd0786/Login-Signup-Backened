@@ -212,18 +212,14 @@ exports.deleteUser = asyncHandler(async function (req, res) {
         .json(new ApiResponse(200, user, "User delete successfully"));
 });
 
+//  Get current users who is login
 
 exports.currentUser = asyncHandler(async function (req, res) {
-    const user = await User.findById(req.user._id).select("-password, -refreshToken");
-
-    if (!user) {
-        throw new ApiError(204, "User already logged out")
-    }
 
     return res
         .status(200)
         .json(
-            new ApiResponse(200, user, "This user is logged in")
+            new ApiResponse(200, req.user, "This user is logged in")
         )
 })
 
