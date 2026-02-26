@@ -5,6 +5,7 @@ const { ApiError } = require("../utils/ApiError");
 // const emailService = require("../services/email.service.js");
 const jwt = require("jsonwebtoken");
 
+
 async function generateAccessAndRefreshTokens(userId) {
     try {
         const user = await User.findById(userId);
@@ -47,7 +48,6 @@ exports.signup = asyncHandler(async (req, res) => {
     });
 
     const createdUser = await User.findById(user._id).select("-password");
-    // console.log(createdUser);
     if (!createdUser) {
         throw new ApiError(
             500,
@@ -59,13 +59,11 @@ exports.signup = asyncHandler(async (req, res) => {
         .status(201)
         .json(new ApiResponse(200, createdUser, "User registered successfully"));
 
-    // await emailService.sendRegistrationEmail(user.email, user.username);
 });
 
 // Login Page
 exports.login = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
-    // if password does not match then res[et your password through registered email
 
     const user = await User.findOne({ $or: [{ email }] });
     if (!user) {
@@ -176,13 +174,6 @@ exports.updateUserPassword = asyncHandler(async function (req, res) {
             "New password does not match with confirm password",
         );
     }
-    // const incomingrefreshToken = req.cookies.refreshToken || req.body.refreshToken;
-
-    // if (!incomingrefreshToken) {
-    //     throw new ApiError(401, "User is not valid!!")
-    // }
-
-    // const decodedToken = jwt.verify(incomingrefreshToken, process.env.JWT_REFRESH_KEY);
 
     const user = await User.findById(req.user?._id);
 
@@ -200,6 +191,7 @@ exports.updateUserPassword = asyncHandler(async function (req, res) {
         .json(new ApiResponse(200, {}, "Your password changed successfull"));
 });
 
+// Delete user controller
 exports.deleteUser = asyncHandler(async function (req, res) {
     const user = await User.findByIdAndDelete(req.user._id).select("-password -refreshToken");
 
