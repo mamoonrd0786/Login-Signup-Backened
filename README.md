@@ -122,7 +122,9 @@ Production mode
 npm start
 The server will run on
 http://localhost:8000
+
 # API Endpoints
+
 ## Register
 POST /api/register
 Request Body
@@ -132,7 +134,6 @@ Request Body
  "password": "123456"
 }
 ```
----
 ## Login
 POST /api/login
 Request Body
@@ -146,18 +147,24 @@ Response
 * Sets **accessToken cookie**
 * Sets **refreshToken cookie**
 ---
+
 ## Logout
+
 POST /api/logout
 Requires an authentication cookie.
 Clears
 * accessToken
 * refreshToken
 ---
+
 ## Refresh Token
+
 POST /api/refresh-token
 Generates a new access token using a refresh token.
 ---
+
 # Authentication Flow
+
 ```
 User Login
      │
@@ -178,33 +185,42 @@ Protected Routes use JWT Middleware
 Logout clears cookies
 ```
 ---
+
 # Security Features
 * HTTPOnly cookies prevent XSS attacks
 * JWT verification middleware
 * Refresh token rotation
 * Secure logout mechanism
----
+
 # JSON Web Token (JWT)
+
   * JSON Web Token (JWT) is a compact, URL-safe token used for securely transmitting information between parties as a JSON object. It is widely used for authentication and authorization      in modern web applications.
+
 # How JWT Works
+
   * JWT consists of three parts separated by dots (.):
     like this: xxxxx.yyyyy.zzzzz
 1. Header – Contains the token type and signing algorithm.
 2. Payload – Contains the claims or data about the user (e.g., user ID, role).
 3. Signature – Verifies that the token is not tampered with. It is created by: ( HMACSHA256(base64UrlEncode(header) + "." + base64UrlEncode(payload), secret) )
+
 # JWT Authentication Flow
-1. User Login
+
+ 1. User Login
    i. User sends email/password to the backend.
    ii. Backend verifies credentials.
    iii. Backend generates a JWT token (access token) and optionally a refresh token.
    iv. Backend sends the JWT to the client, usually in HTTP-only cookies or in the response body.
+
 # Access protected routes
   1. Client sends requests with JWT in the Authorization header or cookie. ( Authorization: Bearer <JWT> )
+
 # Why use JWT?
  * Stateless Authentication: No need to store sessions in DB.
  * Secure: Can be signed and optionally encrypted.
  * Compact: Easy to send in headers or cookies.
  * Cross-platform: Works with web, mobile, and microservices.
+
 Tip: JWT is not a session. It does not store data server-side. Always treat it as a stateless authentication mechanism.
 # Author
 Your Name
