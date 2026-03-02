@@ -60,7 +60,7 @@ userSchema.methods.generateJSONWebToken = function () {
         process.env.JWT_SECRET_KEY,
         {
             // expiresIn: process.env.JWT_EXPIRES_IN
-            expiresIn: "15m"
+            expiresIn: "1h"
         }
     )
 }

@@ -31,7 +31,7 @@ async function generateAccessAndRefreshTokens(userId) {
 // Signup controller
 
 exports.signup = asyncHandler(async (req, res) => {
-    const { username, email, password, role } = req.body;
+    const { username, email, password } = req.body;
 
     // Existing user
     const existingUser = await User.findOne({ $or: [{ username }, { email }] });
@@ -43,8 +43,7 @@ exports.signup = asyncHandler(async (req, res) => {
     const user = await User.create({
         username: username,
         email: email,
-        password: password,
-        role: role,
+        password: password
     });
 
     const createdUser = await User.findById(user._id).select("-password");
@@ -57,7 +56,7 @@ exports.signup = asyncHandler(async (req, res) => {
 
     return res
         .status(201)
-        .json(new ApiResponse(200, createdUser, "User registered successfully"));
+        .json(new ApiResponse({},createdUser,201, "User registered successfully"));
 
 });
 
@@ -77,7 +76,8 @@ exports.login = asyncHandler(async (req, res) => {
 
     const options = {
         httpOnly: true,
-        secure: true,
+        secure: false,
+        sameSite:'lax'
     };
 
     const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
@@ -87,30 +87,48 @@ exports.login = asyncHandler(async (req, res) => {
         .status(200)
         .cookie("accessToken", accessToken, options)
         .cookie("refreshToken", refreshToken, options)
-        .json(new ApiResponse(user, 200, "Congrats! Log In Successfull"));
+        .json(new ApiResponse({},{user: user._id},200, "Congrats! Log In Successfull"));
 });
 
 exports.logout = asyncHandler(async (req, res) => {
-    const user = await User.findByIdAndUpdate(
-        req.user._id,
-        {
-            refreshToken: undefined,
-        },
-        {
-            new: true,
-        },
-    );
+    // let userId = null;
+    // try {
+    //     const decoded = jwt.verify(req.cookies.accessToken || req.header("Authorization")?.replace("Bearer ", ""), process.env.JWT_SECRET_KEY);
+    //     userId = decoded?._id;
+    // } catch (error) {
+    //     console.log(error);
+    // }
 
-    const options = {
-        httpOnly: true,
-        secure: true,
-    };
+    // const refreshToken = req.cookies.refreshToken;
 
-    res
-        .status(200)
-        .clearCookie("accessToken", options)
-        .clearCookie("refreshToken", options)
-        .json(new ApiResponse({}, 200, "User logged out"));
+    // if (refreshToken) {
+        console.log("User ", req.user);
+        console.log("Cookies ", req.cookies);
+        await User.findByIdAndUpdate(
+            req.user._id,
+            {
+                refreshToken: undefined,
+            },
+            {
+                new: true,
+            },
+        );
+        
+        const options = {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'lax'
+        };
+        
+        res
+            .status(200)
+            .clearCookie("accessToken", options)
+            .clearCookie("refreshToken", options)
+            .json({
+                message: 'Logout',
+                success: true
+            });
+    // }
 });
 
 // Controller of refreshToken
@@ -146,8 +164,8 @@ exports.refreshTokenAgain = asyncHandler(async (req, res, next) => {
         };
 
         return res
-            .cookie("refreshToken".newrefreshToken, options)
-            .cookie("accessToken".accessToken, options)
+            .cookie("refreshToken",newrefreshToken, options)
+            .cookie("accessToken",accessToken, options)
             .json(
                 new ApiResponse(
                     200,

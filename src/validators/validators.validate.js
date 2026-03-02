@@ -4,8 +4,6 @@ exports.validateSignup = [
     body('username')
         .notEmpty()
         .withMessage("Username is required")
-        .isString()
-        .withMessage("Username should be a string")
         .trim()
         .isLength({ min: 2, max: 15 })
         .withMessage("Username must be between 2 to 15 characters")

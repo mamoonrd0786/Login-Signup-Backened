@@ -1,14 +1,6 @@
 const Book = require('../models/book.model');
 
 const createBook = async function (req, res) {
-    // sabse pahle book ka data lenge
-    // book available hai kya ye check karenge
-    // savi fields ka validation check karenge
-    // book sirf admin hi add karsakta hai 
-    // book add karenge
-    // agar book add nhi hua hai to ek error message generate karenge
-    // agar book add ho gaya hai to user ko response karenge
-
     const { title, author, ISBN, category, quantity } = req.body;
 
     const bookAvailable = await Book.findOne({ $or: [{ ISBN, author, title }] });
@@ -49,6 +41,32 @@ const createBook = async function (req, res) {
     )
 }
 
+// Fetch all the book
 
-module.exports = { createBook };
+const getAllBooks = async function(req, res){
+    const logInUser = req.user;
+
+    if (!logInUser) {
+        setTimeout(async function(){
+            return res.json(
+                new Error('Logged in please !!')
+            )
+        }, 4000)
+    }
+
+   const allBooks = await Book.find({});
+
+   return res.status(200).json({
+    statusCode: 200,
+    allBooks: allBooks,
+    message: 'All books'
+   })
+}
+
+// Update books
+
+
+
+
+module.exports = { createBook, getAllBooks };
 

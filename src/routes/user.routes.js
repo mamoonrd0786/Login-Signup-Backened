@@ -10,10 +10,10 @@ const userRouter = Router();
 userRouter.route("/signup").post(Validations.validateSignup, validate, UserController.signup);
 userRouter.route("/login").post(Validations.validateLogin,validate, UserController.login);
 
-userRouter.route("/logout").post(verifyJWT,allowRoles("user"), UserController.logout);
-userRouter.route("/refresh-token").post(verifyJWT, allowRoles("admin"),UserController.refreshTokenAgain);
-userRouter.route("/update-password").post(verifyJWT, UserController.updateUserPassword);
-userRouter.route("/delete-user").post(verifyJWT,allowRoles("admin"),UserController.deleteUser);
+userRouter.route("/logout").post(verifyJWT,UserController.logout);
+userRouter.route("/refresh-token").post(verifyJWT, allowRoles("user"),UserController.refreshTokenAgain);
+userRouter.route("/update-password").patch(verifyJWT, UserController.updateUserPassword);
+userRouter.route("/delete-user").get(verifyJWT,allowRoles("admin"),UserController.deleteUser);
 userRouter.route("/current-user").post(verifyJWT, allowRoles("user"), UserController.currentUser);
 userRouter.route('/all-users').get(UserController.getAllUsers);
 
