@@ -101,8 +101,8 @@ Don't upload these files to GitHub (Due to security reasons)
     iii. JWT_SECRET_KEY=your_access_token_secret
     iv. JWT_REFRESH_KEY=your_refresh_token_secret
 # Node.js Setup
-Install Node.js
-## Download and install from https://nodejs.org. Recommended LTS version.
+## Install Node.js
+   Download and install from https://nodejs.org. Recommended LTS version.
 ## Verify Node.js and npm installation
   node -v
   npm -v
