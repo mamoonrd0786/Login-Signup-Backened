@@ -21,75 +21,36 @@ Production-ready authentication backend built with Node.js, Express, JWT, and Mo
 - cors
 - cookie-parser
 ## Folder Structure
-project-root
-├── backend
-│   ├── src
-│   │   ├── config
-│   │   │   ├── db.js
-│   │   │   └── env.js
-│   │   │
-│   │   ├── controllers
-│   │   │   ├── auth.controller.js
-│   │   │   ├── user.controller.js
-│   │   │   └── book.controller.js
-│   │   │
-│   │   ├── models
-│   │   │   ├── user.model.js
-│   │   │   └── book.model.js
-│   │   │
-│   │   ├── routes
-│   │   │   ├── auth.routes.js
-│   │   │   ├── user.routes.js
-│   │   │   └── book.routes.js
-│   │   │
-│   │   ├── middlewares
-│   │   │   ├── auth.middleware.js
-│   │   │   ├── error.middleware.js
-│   │   │   └── rateLimit.middleware.js
-│   │   │
-│   │   ├── services
-│   │   │   ├── auth.service.js
-│   │   │   └── email.service.js
-│   │   │
-│   │   ├── utils
-│   │   │   ├── logger.js
-│   │   │   ├── apiResponse.js
-│   │   │   └── token.js
-│   │   │
-│   │   ├── validations
-│   │   │   └── auth.validation.js
-│   │   │
-│   │   ├── app.js
-│   │   └── server.js
-│   │
-│   ├── package.json
-│   └── .env
+project-name/
 │
-├── frontend
-│   ├── public
-│   │   ├── images
-│   │   └── icons
+├── src/
+│   ├── controllers/
+│   │   ├── auth.controller.js
 │   │
-│   ├── css
-│   │   ├── style.css
-│   │   └── responsive.css
+│   ├── models/
+│   │   ├── user.model.js
 │   │
-│   ├── js
-│   │   ├── api.js
-│   │   ├── auth.js
-│   │   ├── logout.js
-│   │   └── main.js
+│   ├── routes/
+│   │   ├── auth.routes.js
 │   │
-│   ├── pages
-│   │   ├── login.html
-│   │   ├── register.html
-│   │   ├── dashboard.html
-│   │   └── books.html
+│   ├── middlewares/
+│   │   ├── auth.middleware.js
 │   │
-│   └── index.html
+│   ├── utils/
+│   │   ├── ApiError.js
+│   │   ├── ApiResponse.js
+│   │   ├── asyncHandler.js
+│   │
+│   ├── config/
+│   │   ├── db.js
+│   │
+│   └── index.js
 │
-├── README.md
-└── .gitignore
+├── public/
+├── .env.example
+├── .gitignore
+├── package.json
+└── README.md
 ## How to set up for the project
 Don't upload these files to GitHub (Due to security reasons)
  1. node_modules
@@ -104,6 +65,204 @@ Don't upload these files to GitHub (Due to security reasons)
 ## Install Node.js
    Download and install from https://nodejs.org. Recommended LTS version.
 ## Verify Node.js and npm installation
-  node -v
-  npm -v
+  i. node -v
+      or
+  ii. npm -v
+
+# Node.js Authentication API
+
+A production-ready authentication backend built with **Node.js, Express, MongoDB, JWT, and HTTP-only cookies**.
+
+This project implements secure authentication using:
+
+* Access Token
+* Refresh Token
+* HTTPOnly Cookies
+* JWT Verification Middleware
+
+---
+
+# Features
+
+* User Registration
+* User Login
+* Secure Logout
+* Refresh Token System
+* JWT Authentication
+* HTTPOnly Cookie Security
+* Production-ready folder structure
+
+---
+
+# Tech Stack
+
+* Node.js
+* Express.js
+* MongoDB
+* Mongoose
+* JWT (jsonwebtoken)
+* Cookie Parser
+* CORS
+
+---
+
+# Installation
+
+Clone the repository
+
+```
+git clone https://github.com/yourusername/node-auth-api.git
+```
+
+Go into the project folder
+
+```
+cd node-auth-api
+```
+
+Install dependencies
+
+```
+npm install
+```
+
+---
+
+# Environment Variables
+
+Create a `.env` file in the root folder.
+
+Example `.env`:
+
+```
+PORT=8000
+
+MONGO_URI=your_mongodb_connection_string
+
+JWT_SECRET_KEY=your_access_token_secret
+
+JWT_REFRESH_KEY=your_refresh_token_secret
+```
+
+---
+
+# Run the Server
+
+Development mode
+
+```
+npm run dev
+```
+
+Production mode
+
+```
+npm start
+```
+
+The server will run on
+
+```
+http://localhost:8000
+```
+
+---
+
+# API Endpoints
+
+## Register
+
+POST /api/register
+
+Request Body
+
+```
+{
+ "email": "user@gmail.com",
+ "password": "123456"
+}
+```
+
+---
+
+## Login
+
+POST /api/login
+
+Request Body
+
+```
+{
+ "email": "user@gmail.com",
+ "password": "123456"
+}
+```
+
+Response
+
+* Sets **accessToken cookie**
+* Sets **refreshToken cookie**
+
+---
+
+## Logout
+
+POST /api/logout
+
+Requires an authentication cookie.
+
+Clears
+
+* accessToken
+* refreshToken
+
+---
+
+## Refresh Token
+
+POST /api/refresh-token
+
+Generates a new access token using a refresh token.
+
+---
+
+# Authentication Flow
+
+```
+User Login
+     │
+     ▼
+Server Generates Tokens
+     │
+     ▼
+Access Token (Short Life)
+Refresh Token (Long Life)
+     │
+     ▼
+Stored in HTTPOnly Cookies
+     │
+     ▼
+Protected Routes use JWT Middleware
+     │
+     ▼
+Logout clears cookies
+```
+
+---
+
+# Security Features
+
+* HTTPOnly cookies prevent XSS attacks
+* JWT verification middleware
+* Refresh token rotation
+* Secure logout mechanism
+
+---
+
+# Author
+
+Your Name
+
+GitHub: https://github.com/yourusername
+
 
