@@ -8,18 +8,6 @@ Production-ready authentication backend built with Node.js, Express, JWT, and Mo
 - Secure HTTP - Only cookies
 - JWT Authentication (Access + Refresh Token)
 - Centralized Error Handling
-## Tech Stack
-- Node.Js
-- Express
-- MongoDB
-- mongoose
-- JWT
-- Bcrypt
-- Express rate limit
-- Express validators
-- Nodemailer for Email notifications
-- cors
-- cookie-parser
 ## Folder Structure
 project-name/
 │
@@ -81,19 +69,6 @@ This project implements secure authentication using:
 * JWT Verification Middleware
 
 ---
-
-# Features
-
-* User Registration
-* User Login
-* Secure Logout
-* Refresh Token System
-* JWT Authentication
-* HTTPOnly Cookie Security
-* Production-ready folder structure
-
----
-
 # Tech Stack
 
 * Node.js
