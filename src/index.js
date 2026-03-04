@@ -5,7 +5,7 @@ const app = require("./app.js");
 const connectDB = require("./db/database.js");
 
 
-// Connect to database
+// DATABASE CONNECTION
 connectDB().then(function () {
     app.listen(process.env.PORT, function () {
         console.log(`App is running on PORT NUMBER: ${process.env.PORT}`);

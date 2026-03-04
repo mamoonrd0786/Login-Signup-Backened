@@ -31,7 +31,7 @@ async function generateAccessAndRefreshTokens(userId) {
 // Signup controller
 
 exports.signup = asyncHandler(async (req, res) => {
-    const { username, email, password } = req.body;
+    const { name, username, email, password } = req.body;
 
     // Existing user
     const existingUser = await User.findOne({ $or: [{ username }, { email }] });
@@ -41,6 +41,7 @@ exports.signup = asyncHandler(async (req, res) => {
 
     // Create user
     const user = await User.create({
+        name: name,
         username: username,
         email: email,
         password: password
@@ -62,9 +63,9 @@ exports.signup = asyncHandler(async (req, res) => {
 
 // Login Page
 exports.login = asyncHandler(async (req, res) => {
-    const { email, password } = req.body;
+    const { username, email, password } = req.body;
 
-    const user = await User.findOne({ $or: [{ email }] });
+    const user = await User.findOne({ $or: [{ email, username }] });
     if (!user) {
         throw new ApiError(404, "User is not existed. Sign Up Please !!");
     }

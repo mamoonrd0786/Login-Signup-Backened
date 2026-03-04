@@ -8,10 +8,17 @@ const authorSchema = new Schema(
             required: true,
             unique: true
         },
-        book: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Book'
-        }
+        email: {
+            type: String,
+            required: true,
+            unique: true
+        },
+        book: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Book'
+            }
+        ]
     },
     {
         timestamps: true

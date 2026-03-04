@@ -6,6 +6,11 @@ const bcrypt = require("bcrypt");
 // const userSchema = new mongoose.Schema(
 const userSchema = new Schema(
     {
+        name:{
+            type:String,
+            unique: [true, 'Name required'],
+            index:true
+        },
         username:
         {
             type: String,
@@ -20,7 +25,8 @@ const userSchema = new Schema(
             required: true,
             unique: true,
             trim: true,
-            lowercase: true
+            lowercase: true,
+            index: true
         },
         password:
         {
@@ -36,6 +42,9 @@ const userSchema = new Schema(
             type: String,
             enum: ["admin", "librarian", "user"],
             default: "user"
+        },
+        isActive:{
+            type: Boolean
         }
     }, { timestamps: true })
 

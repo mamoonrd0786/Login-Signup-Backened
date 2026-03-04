@@ -2,6 +2,8 @@ const API_URL = 'http://localhost:4000/api/v1/users';
 
 const registerForm = document.getElementById("registerForm");
 const loginForm = document.getElementById("loginForm");
+const usersTableBody = document.getElementById("usersTableBody");
+
 
 if (registerForm) {
     registerForm.addEventListener('submit', async function (e) {
@@ -27,14 +29,17 @@ if (registerForm) {
 
             const data = await response.json();
             if (response.ok) {
-                const paragraph = document.createElement('p');
-                paragraph.className = 'message';
-                paragraph.innerText = `${username} !! Registered successfully`;
+                
                 const newChlid = document.getElementById('newChild');
-                newChlid.appendChild(paragraph);
-                paragraph.style.animationDelay = '0.5s'
+                newChlid.classList.add('alert', 'alert-success', 'message');
+                newChlid.innerText = `${username} !! Registered successfully`;
+                // const paragraph = document.createElement('p');
+                // newChlid.appendChild(paragraph);
+                newChlid.style.animationDelay = '0.5s';
                 setTimeout(() => {
-                    newChlid.removeChild(paragraph);
+                    // newChlid.removeChild(paragraph);
+                    newChlid.innerText = '';
+                    newChlid.classList.remove('alert', 'alert-success', 'message');
                     setTimeout(() => {
                         window.location.href = 'login.html'
                     }, 2000);
@@ -44,8 +49,8 @@ if (registerForm) {
             }
 
         } catch (error) {
-            // console.log(error);
-            alert('Something went wrong' || error.message)
+            console.log(error);
+            // alert('Something went wrong' || error.message)
         }
     })
 }
@@ -123,4 +128,16 @@ async function logoutUser() {
     } catch (error) {
         alert('Something went wrong with logout page' || error.message)
     }
+}
+
+
+// Delete users
+
+function deleteUser(){
+    
+    const deleteUser = document.getElementById('deleteThisUser');
+    console.log(usersTableBody);
+    console.log(deleteUser);
+    usersTableBody.removeChild(deleteUser);
+    
 }

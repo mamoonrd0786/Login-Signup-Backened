@@ -11,9 +11,14 @@ const bookSchema = new Schema(
 
         },
         author: {
-            type: [{type: String, required: true}],
-            required: [true, 'Author name should be compulsary'],
-            unique: [true, 'Do not write same author name']
+            type: [
+                {
+                    type: String,
+                    // type: mongoose.Schema.Types.ObjectId,
+                    required: [true, 'Author is required'],
+                    // ref: 'Author'
+                }
+            ],
 
         },
         ISBN: {
@@ -30,21 +35,28 @@ const bookSchema = new Schema(
         quantity: {
             type: Number,
             default: 1,
-            min: 1,
-            max: 10
-
+            min: 0
         },
         isAvailable: {
             type: Boolean,
             default: false
         },
-        coverURL: {
+        coverImg: {
             type: String
         },
         status: {
             type: String,
             enum: ['available', 'out_of_stock', 'archived'],
             default: 'available'
+        },
+        language: {
+            type: String,
+            enum: ['english', 'urdu', 'arabic', 'hindi'],
+            default: 'english'
+        },
+        isDeleted: {
+            type: Boolean,
+            default: false
         }
     },
     {

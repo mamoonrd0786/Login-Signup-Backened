@@ -1,27 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" />
     <title>Users</title>
 </head>
+
 <body>
-        <div id="navbar">
-            <!-- Navbar will be loaded here --> 
-        </div>
-    <h1>Users Page</h1>
-
-
-
-
-
-
-
-
-
-
-
+    <div id="navbar">
+        <!-- Navbar will be loaded here -->
+    </div>
+    <div class="container mt-5 d-flex flex-column align-items-center border p-5 rounded justify-content-center">
+        <h2 class="mb-4">Users List</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Delete</th>
+                    <th scope="col">View</th>
+                </tr>
+            </thead>
+            <tbody id="usersTableBody" class="w-100">
+                <!-- User rows will be populated here -->
+                <tr id="deleteThisUser">
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        John Doe
+                    </td>
+                    <td>
+                        john.doe@example.com
+                    </td>
+                    <td><button class="btn btn-warning btn-sm">
+                            Edit
+                        </button></td>
+                    <td><button class="btn btn-danger btn-sm" onclick="deleteUser()">Delete</button></td>
+                    <td><button class="btn btn-info btn-sm">View</button></td>
+                </tr>
+            </tbody>
+    </div>
 
 
 
@@ -31,9 +54,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="./js/script.js"></script>
     <script>
-        $(function(){
+        $(function () {
             $("#navbar").load("./navbar.html");
         })
     </script>
 </body>
+
 </html>
