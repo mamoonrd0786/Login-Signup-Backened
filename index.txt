@@ -1,6 +1,0 @@
-{
-  "bookId": "69adaedce14bb7db533cd403",
-  "userId": "69a9d18f2be01d86cb05dc87",
-  "issueDate": "2026-09-03",
-  "returnDate": "2026-09-10"
-}
