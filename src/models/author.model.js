@@ -21,6 +21,7 @@ const authorSchema = new Schema(
         ]
     },
     {
+        // timestamps: true
         timestamps: true
     }
 )

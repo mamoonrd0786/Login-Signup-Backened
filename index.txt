@@ -1,7 +1,6 @@
-In register user what we can use to store user data?
-
-take name, email, password from request body from frontend / postman
-validation - not empty
-first check if already user exists with same email then send to direect message to please login 
-if user doesnot exists then create the new user and store in database
-before store the password into database we need to hash the password for security purpose
+{
+  "bookId": "69adaedce14bb7db533cd403",
+  "userId": "69a9d18f2be01d86cb05dc87",
+  "issueDate": "2026-09-03",
+  "returnDate": "2026-09-10"
+}

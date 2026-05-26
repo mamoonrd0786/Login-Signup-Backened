@@ -5,15 +5,18 @@ const loginForm = document.getElementById("loginForm");
 const usersTableBody = document.getElementById("usersTableBody");
 
 
+// Register User
+
 if (registerForm) {
     registerForm.addEventListener('submit', async function (e) {
         e.preventDefault();
 
+        const name = document.getElementById('name')?.value;
         const username = document.getElementById('username')?.value;
         const email = document.getElementById('email')?.value;
         const password = document.getElementById('password')?.value;
 
-        if (!username || !email || !password) {
+        if (!name || !username || !email || !password) {
             alert('Credentials required')
             return;
         }
@@ -24,26 +27,25 @@ if (registerForm) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username, email, password })
+                body: JSON.stringify({ name, username, email, password })
             })
 
-            const data = await response.json();
             if (response.ok) {
-                
+                const inputs = this.querySelectorAll('input');
+                inputs.forEach((input) => input.value = '');
+                const paragraph = document.createElement('p');
+                paragraph.className = 'message';
+                paragraph.innerText = `${name} !! Registered successfully`;
                 const newChlid = document.getElementById('newChild');
-                newChlid.classList.add('alert', 'alert-success', 'message');
-                newChlid.innerText = `${username} !! Registered successfully`;
-                // const paragraph = document.createElement('p');
-                // newChlid.appendChild(paragraph);
+                newChlid.appendChild(paragraph);
                 newChlid.style.animationDelay = '0.5s';
+
                 setTimeout(() => {
-                    // newChlid.removeChild(paragraph);
-                    newChlid.innerText = '';
-                    newChlid.classList.remove('alert', 'alert-success', 'message');
+                    newChlid.removeChild(paragraph);
                     setTimeout(() => {
                         window.location.href = 'login.html'
-                    }, 2000);
-                }, 2000);
+                    }, 2500);
+                }, 3000);
             } else {
                 alert(`Registeration failed: ${data.message || response.statusText}`)
             }
@@ -56,7 +58,7 @@ if (registerForm) {
 }
 
 
-//  Login through email, username
+//  Login User
 
 if (loginForm) {
     loginForm.addEventListener('submit', async function (e) {
@@ -103,7 +105,7 @@ if (loginForm) {
 }
 
 
-// Logut the page
+// Logut User
 
 async function logoutUser() {
     try {
@@ -133,11 +135,94 @@ async function logoutUser() {
 
 // Delete users
 
-function deleteUser(){
-    
-    const deleteUser = document.getElementById('deleteThisUser');
-    console.log(usersTableBody);
-    console.log(deleteUser);
-    usersTableBody.removeChild(deleteUser);
-    
+async function deleteUser() {
+
+    try {
+        const res = await fetch(`${API_URL}/delete-user`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        })
+
+        const data = await res.json();
+        if (!data.ok) {
+            alert('User does not exist')
+        }
+        console.log(data);
+
+    } catch (error) {
+
+    }
+
 }
+
+
+// Add new user
+
+// function addNewUser(name, email, id){
+
+// }
+
+// Fetch all users
+
+// usersTableBody.addEventListener('load', function(){
+//     try {
+//         const data = fetch(`${API_URL}/all-users-data`, {
+//             method: 'GET',
+//             headers: {
+//                 'Content-Type': 'application.json'
+//             },
+
+//         });
+
+//         const res = data.json();
+//         console.log(res);
+
+
+//     } catch (error) {
+//         console.log('Error all users ', error);
+
+//     }
+// })
+
+async function getAllUsers() {
+
+    const usersData = document.querySelector('.usersData');
+    try {
+        const response = await fetch(`${API_URL}/all-users-data`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            // body: JSON.stringify({ email, name  })
+
+        })
+
+        const data = await response.json();
+
+        if (data.length === 0) {
+            alert('User not present')
+        }
+
+        data.data.forEach(user => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+            <td>${user._id}</td>
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+            <td><button class="btn btn-warning btn-sm" onclick="editUser" >Edit</button></td>
+            <td><button class="btn btn-danger btn-sm" onclick="deleteUser()">Delete</button></td>
+            <td><button class="btn btn-info btn-sm" onclick="viewUser" >View</button></td>
+            `
+            usersData.appendChild(tr);
+        })
+
+    } catch (error) {
+        console.log('Error in fetch data ', error);
+
+    }
+}
+
+getAllUsers();

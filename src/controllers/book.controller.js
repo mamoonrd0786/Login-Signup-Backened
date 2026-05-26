@@ -1,5 +1,6 @@
 const Book = require('../models/book.model');
-const ApiError = require('../utils/ApiError');
+// const ApiError = require('../utils/ApiError');
+
 const { ERROR_CODES, HTTP_STATUS, SUCCESS_MESSAGES } = require('../utils/bookResponse.util')
 
 
@@ -142,8 +143,38 @@ const deleteBook = async function (req, res) {
 // SEARCH_BOOK_THROUGH_TITLE_AND_AUTHOR
 
 const searchBookWithPagination = async function (req, res) {
+    const search = req.query || '';
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 3;
+    const skip = (page - 1) * limit;
 
+    const query = {
+        $or: [
+            { title: { $regex: search, $options: 'i' } },
+            { author: { $regex: search, $options: 'i' } },
+            { ISBN: { $regex: search, $options: 'i' } }
+        ]
+    }
+
+    const totalBooks = await Book.countDocuments(query);
+    const books = await Book.find(query).skip(skip).limit(limit);
+
+    return res.status(HTTP_STATUS.SUCCESS)
+        .json(
+            {
+                message: SUCCESS_MESSAGES.BOOK_LIST_RETRIEVED,
+                totalBooks,
+                page: page,
+                pageLimit: limit,
+                skipData: skip,
+                totalPage: Math.ceil(totalBooks / limit),
+                data: books,
+                success: true
+            }
+        )
 }
+
+
 
 
 module.exports = {

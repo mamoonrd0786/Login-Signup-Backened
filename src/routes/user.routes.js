@@ -13,9 +13,11 @@ userRouter.route("/login").post(Validations.validateLogin,validate, UserControll
 userRouter.route("/logout").post(verifyJWT,UserController.logout);
 userRouter.route("/refresh-token").post(verifyJWT, allowRoles("user"),UserController.refreshTokenAgain);
 userRouter.route("/update-password").patch(verifyJWT, UserController.updateUserPassword);
-userRouter.route("/delete-user").get(verifyJWT,allowRoles("admin"),UserController.deleteUser);
+userRouter.route("/delete-user").get(verifyJWT,UserController.deleteUser);
 userRouter.route("/current-user").post(verifyJWT, allowRoles("user"), UserController.currentUser);
 userRouter.route('/all-users').get(UserController.getAllUsers);
+userRouter.route('/all-users-data').get(UserController.allUsersData);
+userRouter.route('/users-aggregate').get(UserController.getUserFromAggrigation);
 
 
 module.exports = userRouter;

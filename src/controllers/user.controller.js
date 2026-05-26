@@ -5,6 +5,7 @@ const { ApiError } = require("../utils/ApiError");
 // const emailService = require("../services/email.service.js");
 const jwt = require("jsonwebtoken");
 
+// GENERATE_ACCESS_AND_REFRESH_TOKEN
 
 async function generateAccessAndRefreshTokens(userId) {
     try {
@@ -34,9 +35,9 @@ exports.signup = asyncHandler(async (req, res) => {
     const { name, username, email, password } = req.body;
 
     // Existing user
-    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {
-        throw new ApiError(409, "User with email or username already exists");
+        // throw new ApiError(409, "User with email or username already exists");
     }
 
     // Create user
@@ -55,17 +56,18 @@ exports.signup = asyncHandler(async (req, res) => {
         );
     }
 
+    // await emailService.sendRegistrationEmail(email, name);
     return res
         .status(201)
-        .json(new ApiResponse({},createdUser,201, "User registered successfully"));
+        .json(new ApiResponse({}, createdUser, 201, "User registered successfully"));
 
 });
 
 // Login Page
 exports.login = asyncHandler(async (req, res) => {
-    const { username, email, password } = req.body;
+    const { email, password } = req.body;
 
-    const user = await User.findOne({ $or: [{ email, username }] });
+    const user = await User.findOne({ $or: [{ email }] });
     if (!user) {
         throw new ApiError(404, "User is not existed. Sign Up Please !!");
     }
@@ -78,7 +80,7 @@ exports.login = asyncHandler(async (req, res) => {
     const options = {
         httpOnly: true,
         secure: false,
-        sameSite:'lax'
+        sameSite: 'lax'
     };
 
     const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
@@ -88,47 +90,35 @@ exports.login = asyncHandler(async (req, res) => {
         .status(200)
         .cookie("accessToken", accessToken, options)
         .cookie("refreshToken", refreshToken, options)
-        .json(new ApiResponse({},{user: user._id},200, "Congrats! Log In Successfull"));
+        .json(new ApiResponse({}, { user: user._id }, 200, "Congrats! Log In Successfull"));
 });
 
 exports.logout = asyncHandler(async (req, res) => {
-    // let userId = null;
-    // try {
-    //     const decoded = jwt.verify(req.cookies.accessToken || req.header("Authorization")?.replace("Bearer ", ""), process.env.JWT_SECRET_KEY);
-    //     userId = decoded?._id;
-    // } catch (error) {
-    //     console.log(error);
-    // }
 
-    // const refreshToken = req.cookies.refreshToken;
+    await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            refreshToken: undefined,
+        },
+        {
+            new: true,
+        },
+    );
 
-    // if (refreshToken) {
-        console.log("User ", req.user);
-        console.log("Cookies ", req.cookies);
-        await User.findByIdAndUpdate(
-            req.user._id,
-            {
-                refreshToken: undefined,
-            },
-            {
-                new: true,
-            },
-        );
-        
-        const options = {
-            httpOnly: true,
-            secure: false,
-            sameSite: 'lax'
-        };
-        
-        res
-            .status(200)
-            .clearCookie("accessToken", options)
-            .clearCookie("refreshToken", options)
-            .json({
-                message: 'Logout',
-                success: true
-            });
+    const options = {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax'
+    };
+
+    res
+        .status(200)
+        .clearCookie("accessToken", options)
+        .clearCookie("refreshToken", options)
+        .json({
+            message: 'Logout',
+            success: true
+        });
     // }
 });
 
@@ -165,8 +155,8 @@ exports.refreshTokenAgain = asyncHandler(async (req, res, next) => {
         };
 
         return res
-            .cookie("refreshToken",newrefreshToken, options)
-            .cookie("accessToken",accessToken, options)
+            .cookie("refreshToken", newrefreshToken, options)
+            .cookie("accessToken", accessToken, options)
             .json(
                 new ApiResponse(
                     200,
@@ -209,6 +199,7 @@ exports.updateUserPassword = asyncHandler(async function (req, res) {
         .status(200)
         .json(new ApiResponse(200, {}, "Your password changed successfull"));
 });
+
 
 // Delete user controller
 exports.deleteUser = asyncHandler(async function (req, res) {
@@ -258,4 +249,55 @@ exports.getAllUsers = asyncHandler(async function (req, res) {
         new ApiResponse(200, { total, limit, page, skip, totalPage: Math.ceil(total / limit), users }, "Users here")
     )
 
+})
+
+// Get All usrs
+
+exports.allUsersData = asyncHandler(async function (req, res) {
+    const users = await User.find({}).select('-password -refreshToken');
+    
+    if (!users) {
+        return res.status(400).json({
+            success: false,
+            message: 'Users not available'
+        })
+    }
+
+    return res.status(200).json({
+        success: true,
+        message: 'Fetching successfull',
+        data: users
+    })
+})
+
+
+exports.getUserFromAggrigation = asyncHandler(async function (req, res) {
+    const search = req.query.search || '';
+    const page = parseInt(req.query.page) || 1;
+    const perPage = parseInt(req.query.limit) || 3;
+    const totalUsers = await User.aggregate([
+        {
+            $match: {
+                $or: [
+                    {
+                        username: { $regex: search, $options: 'i' }
+                    },
+                    {
+                        email: { $regex: search, $options: 'i' }
+                    }]
+            }
+        },
+        {
+            $skip: (page - 1) * perPage
+        },
+        {
+            $limit: perPage
+        }
+    ])
+
+    res.status(200).json({
+        message: 'Data fetch successfull',
+        data: totalUsers,
+        success: true
+    })
 })

@@ -6,10 +6,10 @@ const bcrypt = require("bcrypt");
 // const userSchema = new mongoose.Schema(
 const userSchema = new Schema(
     {
-        name:{
-            type:String,
+        name: {
+            type: String,
             unique: [true, 'Name required'],
-            index:true
+            index: true
         },
         username:
         {
@@ -39,11 +39,19 @@ const userSchema = new Schema(
             type: String
         },
         role: {
-            type: String,
-            enum: ["admin", "librarian", "user"],
-            default: "user"
+            type: Schema.Types.ObjectId,
+            ref: 'Role'
         },
-        isActive:{
+        permission: {
+            type: Schema.Types.ObjectId,
+            ref: 'Permission'
+        },
+        // role: {
+        //     type: String,
+        //     enum: ["admin", "librarian", "member"],
+        //     default: "member"
+        // },
+        isActive: {
             type: Boolean
         }
     }, { timestamps: true })
@@ -87,6 +95,8 @@ userSchema.methods.generateRefreshJSONWebToken = function () {
         }
     )
 }
+
+
 
 // module.exports = mongoose.model('User', userSchema);
 module.exports = model('User', userSchema);

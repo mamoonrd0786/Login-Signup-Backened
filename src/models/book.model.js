@@ -6,7 +6,7 @@ const bookSchema = new Schema(
         title: {
             type: String,
             required: [true, 'Provide the book tilte'],
-            unique: [true, "Don't write upload the same book again"],
+            unique: [true, "Don't write & upload the same book again"],
             index: true
 
         },
@@ -14,9 +14,7 @@ const bookSchema = new Schema(
             type: [
                 {
                     type: String,
-                    // type: mongoose.Schema.Types.ObjectId,
-                    required: [true, 'Author is required'],
-                    // ref: 'Author'
+                    required: [true, 'Author is required']
                 }
             ],
 
